@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+    <title>TransportCompany</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <button id="insertTransport" type="button" class="btn btn-primary" data-toggle="modal" data-target="#transportInsert">Добавить ТС</button>
+            <button id="deleteTransport" type="button" class="btn btn-primary" data-toggle="modal" data-target="#transportDelete">Удалить ТС</button>
+            <button id="editTransport" type="button" class="btn btn-primary" data-toggle="modal" data-target="#transportEdit">Редактировать ТС</button>
+            <button id="help" type="button" class="btn btn-primary" data-toggle="modal"  data-target="#helpUser">Помощь (Справка)</button>
+        </div>
+        <div class="col-12 table-container">
+            <table class="table table-bordered my-2">
+                <thead>
+                <tr>
+                    <th scope="col">Государственный номер</th>
+                    <th scope="col">Марка</th>
+                    <th scope="col">Модель</th>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Наличие прицепа</th>
+                    <th scope="col">Год выпуска</th>
+                    <th scope="col">Тип ТС</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transport : ${transport}">
+                    <td th:text="${transport.stateNumber}"></td>
+                    <td th:text="${transport.brand}"></td>
+                    <td th:text="${transport.model}"></td>
+                    <td th:text="${transport.category}"></td>
+                    <td th:text="${transport.trailer}"></td>
+                    <td th:text="${transport.yearRelease}"></td>
+                    <td th:text="${transport.vehicleType}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <form method="post" action="filter">
+            <table width="100%" cellspacing="0" cellpadding="6">
+                <tr>
+                    <td align="right" width="200">Государственный номер</td>
+                    <td><input type="text" name="filterStateNumber" maxlength="6" size="30"></td>
+                </tr>
+                <tr>
+                    <td align="right" width="200">Марка</td>
+                    <td><input type="text" name="filterBrand" maxlength="255" size="30"></td>
+                </tr>
+                <tr>
+                    <td align="right" width="200">Модель</td>
+                    <td><input type="text" name="filterModel" maxlength="255" size="30"></td>
+                </tr>
+                <tr>
+                    <td align="right" width="200">Категория</td>
+                    <td><input type="text" name="filterCategory" maxlength="2" size="30"></td>
+                </tr>
+                <tr>
+                    <td align="right" width="200">Год выпуска</td>
+                    <td><input type="text" name="filterYearRelease" maxlength="4" size="30"></td></tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit" class="btn btn-primary">Отфильтровать ТС</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="transportInsert" tabindex="-1" role="dialog" aria-labelledby="transportInsertLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transportInsertLabel">Добавление ТС</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="newStateNumber" class="col-form-label">Государственный номер</label>
+                        <input type="text" class="form-control" id="newStateNumber" maxlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="newBrand" class="col-form-label">Марка</label>
+                        <input type="text" class="form-control" id="newBrand" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="newModel" class="col-form-label">Модель</label>
+                        <input type="text" class="form-control" id="newModel" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="newCategory" class="col-form-label">Категория</label>
+                        <input type="text" class="form-control" id="newCategory" maxlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="newTrailer" class="col-form-label">Наличие прицепа</label>
+                        <td><input type="checkbox" id="newTrailer"></td>
+                    </div>
+                    <div class="form-group">
+                        <label for="newYearRelease" class="col-form-label">Год выпуска</label>
+                        <input type="text" class="form-control" id="newYearRelease" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="newVehicleType" class="col-form-label">Тип ТС</label>
+                        <select id="newVehicleType">
+                            <option value="Водное судно">Водное судно</option>
+                            <option value="Паровоз">Паровоз</option>
+                            <option value="Электровоз">Электровоз</option>
+                            <option value="Электропоезд">Электропоезд</option>
+                            <option value="Тепловоз">Тепловоз</option>
+                            <option value="Дизель-поезд">Дизель-поезд</option>
+                            <option value="Путевая машина">Путевая машина</option>
+                            <option value="Вагон пассажирский">Вагон пассажирский</option>
+                            <option value="Вагон багажный">Вагон багажный</option>
+                            <option value="Вагон изотермический">Вагон изотермический</option>
+                            <option value="Цистерна">Цистерна</option>
+                            <option value="Полувагон">Полувагон</option>
+                            <option value="Платформа">Платформа</option>
+                            <option value="Прочий вагон">Прочий вагон</option>
+                            <option value="Легковой автомобиль общего назначения">Легковой автомобиль общего назначения</option>
+                            <option value="Специальный легковой автомобиль">Специальный легковой автомобиль</option>
+                            <option value="Грузовой автомобиль общего назначения">Грузовой автомобиль общего назначения</option>
+                            <option value="Специальный грузовой автомобиль">Специальный грузовой автомобиль</option>
+                            <option value="Грузопассажирский автомобиль">Грузопассажирский автомобиль</option>
+                            <option value="Автомобиль-тягач">Автомобиль-тягач</option>
+                            <option value="Седельный тягач">Седельный тягач</option>
+                            <option value="Автобус общего назначения">Автобус общего назначения</option>
+                            <option value="Специальный автобус">Специальный автобус</option>
+                            <option value="Сочлененный автобус">Сочлененный автобус</option>
+                            <option value="Микроавтобус">Микроавтобус</option>
+                            <option value="Прочее транспортное средство">Прочее транспортное средство</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="insertTransportButton" type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transportDelete" tabindex="-1" role="dialog" aria-labelledby="transportDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transportDeleteLabel">Удаление ТС</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="deleteStateNumber" class="col-form-label">Государственный номер</label>
+                        <input type="text" class="form-control" id="deleteStateNumber" maxlength="6">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="transportDeleteButton" type="button" class="btn btn-primary">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="helpUser" tabindex="-1" role="dialog" aria-labelledby="helpUserLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="helpUserLabel">Помощь (Справка)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <p> На начальной странице представлена таблица со всеми ТС в БД. Для фильтрации по одному или нескольми параметрам необходимо заполнить соответвующие поля под таблицей и нажать кнопку «Отфильтровать ТС».  Если поле пустое, то по нему не происходит фильтрация. Если все поля пусты, то выводится полный список ТС.
+                        <p> Для добавления ТС в БД необходимо нажать кнопку «Добавить ТС» и заполнить необходимые поля. Государственный номер может состоять из цифр и букв: А, В, Е, К, М, Н, О, Р, С, Т, У, Х (используются заглавные русские буквы). Номер составляется последовательно следующим образом: буква, цифра, цифра, цифра, буква, буква.
+                            Категории ТС могут быть: L1-L7, M1-M3, N1-N3, O1-O4 (используются заглавные английские буквы). Год выпуска может быть от 0 до 9999. Марка и модель не могут быть длинее 255 символов. <b>Нельзя добавить ТС с государственным номером, который уже есть в БД!</b>
+                        <p> Для удаления ТС из БД необходимо нажать кнопку «Добавить ТС» и ввести государственный номер удаляемого ТС. Если он существует, то будет удален.
+                        <p> Для редактирования ТС необходимо нажать кнопку «Редактировать ТС» и ввести государственный номер редактируемого ТС. Если он существует в БД, то будет выведена информация о данном ТС, которую можно изменить.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transportEdit" tabindex="-1" role="dialog" aria-labelledby="transportEditLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transportEditLabel">Редактирование ТС</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="editStateNumber" class="col-form-label">Государственный номер ТС, которое необходимо отредактировать</label>
+                        <input type="text" class="form-control" id="editStateNumber" maxlength="6">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="transportEditButton" type="button" class="btn btn-primary">Извлечь для редактирования</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editingTransport" tabindex="-1" role="dialog" aria-labelledby="transportEditingLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transportEditingLabel">Редактирование ТС</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="editingStateNumber" class="col-form-label">Государственный номер</label>
+                        <input type="text" class="form-control" readonly id="editingStateNumber" maxlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="editingBrand" class="col-form-label">Марка</label>
+                        <input type="text" class="form-control" id="editingBrand" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="editingModel" class="col-form-label">Модель</label>
+                        <input type="text" class="form-control" id="editingModel" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="editingCategory" class="col-form-label">Категория</label>
+                        <input type="text" class="form-control" id="editingCategory" maxlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="editingTrailer" class="col-form-label">Наличие прицепа</label>
+                        <td><input type="checkbox" id="editingTrailer"></td>
+                    </div>
+                    <div class="form-group">
+                        <label for="editingYearRelease" class="col-form-label">Год выпуска</label>
+                        <input type="text" class="form-control" id="editingYearRelease" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="editingVehicleType" class="col-form-label">Тип ТС</label>
+                        <select id="editingVehicleType">
+                            <option value="Водное судно">Водное судно</option>
+                            <option value="Паровоз">Паровоз</option>
+                            <option value="Электровоз">Электровоз</option>
+                            <option value="Электропоезд">Электропоезд</option>
+                            <option value="Тепловоз">Тепловоз</option>
+                            <option value="Дизель-поезд">Дизель-поезд</option>
+                            <option value="Путевая машина">Путевая машина</option>
+                            <option value="Вагон пассажирский">Вагон пассажирский</option>
+                            <option value="Вагон багажный">Вагон багажный</option>
+                            <option value="Вагон изотермический">Вагон изотермический</option>
+                            <option value="Цистерна">Цистерна</option>
+                            <option value="Полувагон">Полувагон</option>
+                            <option value="Платформа">Платформа</option>
+                            <option value="Прочий вагон">Прочий вагон</option>
+                            <option value="Легковой автомобиль общего назначения">Легковой автомобиль общего назначения</option>
+                            <option value="Специальный легковой автомобиль">Специальный легковой автомобиль</option>
+                            <option value="Грузовой автомобиль общего назначения">Грузовой автомобиль общего назначения</option>
+                            <option value="Специальный грузовой автомобиль">Специальный грузовой автомобиль</option>
+                            <option value="Грузопассажирский автомобиль">Грузопассажирский автомобиль</option>
+                            <option value="Автомобиль-тягач">Автомобиль-тягач</option>
+                            <option value="Седельный тягач">Седельный тягач</option>
+                            <option value="Автобус общего назначения">Автобус общего назначения</option>
+                            <option value="Специальный автобус">Специальный автобус</option>
+                            <option value="Сочлененный автобус">Сочлененный автобус</option>
+                            <option value="Микроавтобус">Микроавтобус</option>
+                            <option value="Прочее транспортное средство">Прочее транспортное средство</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="transportEditingButton" type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script>
+    $('#transportInsert').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget) // Button that triggered the modal
+    })
+
+    $('#insertTransportButton').click(function() {
+        let modal = $('#transportInsert')
+        let transport = {
+            stateNumber: modal.find('#newStateNumber').val(),
+            brand: modal.find('#newBrand').val(),
+            model: modal.find('#newModel').val(),
+            category: modal.find('#newCategory').val(),
+            yearRelease: modal.find('#newYearRelease').val(),
+            vehicleType: modal.find('#newVehicleType').val(),
+        };
+        transport.trailer = !!$("#newTrailer").is(":checked");
+        $.ajax({
+            url: '/insert',
+            type: 'POST',
+            data: JSON.stringify(transport),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: () => {
+                location.reload()
+            },
+            error: (err) => {
+                alert(err);
+            }
+        })
+        modal.modal('hide');
+    });
+
+    $('#transportDelete').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget) // Button that triggered the modal
+    })
+
+    $('#transportDeleteButton').click(function() {
+        let modal = $('#transportDelete')
+        let transport = {
+            stateNumber: modal.find('#deleteStateNumber').val(),
+        };
+        $.ajax({
+            url: '/delete',
+            type: 'POST',
+            data: JSON.stringify(transport),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: () => {
+                location.reload()
+            },
+            error: (err) => {
+                alert(err);
+            }
+        })
+        modal.modal('hide');
+    });
+
+    $('#transportEdit').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget) // Button that triggered the modal
+    })
+
+    $('#transportEditButton').click(function() {
+        let modal = $('#transportEdit')
+        let modaledit = $('#editingTransport')
+        let transport = {
+            stateNumber: modal.find('#editStateNumber').val(),
+        };
+        $.ajax({
+            url: '/inf',
+            type: 'POST',
+            data: JSON.stringify(transport),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (data) => {
+                if(data.stateNumber !== null && data.stateNumber !== "") {
+                    $("#editingTransport").modal('show');
+                    modaledit.find('#editingStateNumber').val(data.stateNumber);
+                    modaledit.find('#editingBrand').val(data.brand);
+                    modaledit.find('#editingModel').val(data.model);
+                    modaledit.find('#editingCategory').val(data.category);
+                    modaledit.find('#editingYearRelease').val(data.yearRelease);
+                    modaledit.find('#editingVehicleType').val(data.vehicleType);
+                    if(data.trailer === true)
+                        $('#editingTrailer').prop('checked', true);
+                    else
+                        $('#editingTrailer').prop('checked', false);
+                }
+            },
+            error: (err) => {
+                alert(err);
+            }
+        })
+        modal.modal('hide');
+    });
+    $('#transportEditing').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget) // Button that triggered the modal
+    })
+    $('#transportEditingButton').click(function() {
+        let modal = $('#editingTransport')
+        let transport = {
+            stateNumber: modal.find('#editingStateNumber').val(),
+            brand: modal.find('#editingBrand').val(),
+            model: modal.find('#editingModel').val(),
+            category: modal.find('#editingCategory').val(),
+            yearRelease: modal.find('#editingYearRelease').val(),
+            vehicleType: modal.find('#editingVehicleType').val(),
+        };
+        transport.trailer = !!$("#editingTrailer").is(":checked");
+        $.ajax({
+            url: '/edit',
+            type: 'POST',
+            data: JSON.stringify(transport),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: () => {
+                location.reload()
+            },
+            error: (err) => {
+                alert(err);
+            }
+        })
+        modal.modal('hide');
+    });
+
+</script>
+</body>
+</html>
+<style type="text/css">
+    .container{
+        margin: auto;
+        max-width: 1300px;
+    }
+    .table{
+        width: 100%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+    .table th, .table td{
+        text-align: center;
+        padding: 10px;
+    }
+    .table th{
+        background-color: #1e88e5;
+        color: #fff;
+        position: sticky;
+        top: 0px;
+    }
+    .table th:nth-child(odd) {
+        background: #2196f3;
+    }
+    .table tr:nth-child(even) {
+        background: #f5f5f5;
+    }
+    .table tr{
+        transition: all .3s;
+    }
+    .table tr:hover{
+        background-color: #ccc;
+    }
+    .table td:not(:last-child){
+        border-right: 1px solid #ccc;
+    }
+    .table-container{
+        overflow-x: auto;
+        max-height: 550px;
+        overflow-y: auto;
+    }
+</style>
