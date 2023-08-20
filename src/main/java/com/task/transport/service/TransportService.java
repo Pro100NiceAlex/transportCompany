@@ -11,12 +11,12 @@ public interface TransportService {
                                  String filterModel, String filterCategory,
                                  String filterYearRelease);
     // Добавление ТС в БД
-    void insertNewTransport(Transport newTransport);
+    Boolean insertNewTransport(Transport newTransport);
     // Удаление ТС из БД
-    void deleteTransport(Transport transport);
+    Boolean deleteTransport(Transport transport);
     // Изъятие информации о ТС из БД по гос. номеру
     Transport informTransport(Transport transport);
     // Редактирование ТС в БД
-    void editingTransport(Transport transport);
+    Boolean editingTransport(Transport transport);
 }
 

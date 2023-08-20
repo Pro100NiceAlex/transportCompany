@@ -33,18 +33,22 @@ public class TransportServiceImp1 implements TransportService {
         return transportRepo.findByFilter(filterStateNumber, filterBrand, filterModel, filterCategory,filterYearRelease);
     };
     @Override
-    public void insertNewTransport(Transport newTransport) {
-        if (checkStateNumber(newTransport.getStateNumber()) /*&& !transportRepo.existsById(newTransport.getStateNumber())*/ && newTransport.getBrand() != null && newTransport.getBrand().length() <= 255
+    public Boolean insertNewTransport(Transport newTransport) {
+        if (checkStateNumber(newTransport.getStateNumber()) && !transportRepo.existsById(newTransport.getStateNumber()) && newTransport.getBrand() != null && newTransport.getBrand().length() <= 255
                 && newTransport.getModel() != null && newTransport.getModel().length() <= 255 && checkCategory(newTransport.getCategory()) && newTransport.getTrailer() != null
                 && checkYearRelease(newTransport.getYearRelease()) && newTransport.getVehicleType() != null && newTransport.getVehicleType().length() <= 255) {
             transportRepo.save(newTransport);
+            return true;
         }
+        return false;
     }
     @Override
-    public void deleteTransport(Transport transport){
+    public Boolean deleteTransport(Transport transport){
         if (transport.getStateNumber() != null && transport.getStateNumber().length() == 6 && transportRepo.existsById(transport.getStateNumber())){
             transportRepo.deleteById(transport.getStateNumber());
+            return true;
         }
+        return false;
     };
     @Override
     public Transport informTransport(Transport transport){
@@ -55,13 +59,15 @@ public class TransportServiceImp1 implements TransportService {
         return transport;
     }
     @Override
-    public void editingTransport(Transport transport)
+    public Boolean editingTransport(Transport transport)
     {
-        /*if (checkStateNumber(transport.getStateNumber()) && transportRepo.existsById(transport.getStateNumber()) && transport.getBrand() != null && transport.getBrand().length() <= 255
+        if (checkStateNumber(transport.getStateNumber()) && transportRepo.existsById(transport.getStateNumber()) && transport.getBrand() != null && transport.getBrand().length() <= 255
                 && transport.getModel() != null && transport.getModel().length() <= 255 && checkCategory(transport.getCategory()) && transport.getTrailer() != null
-                && checkYearRelease(transport.getYearRelease()) && transport.getVehicleType() != null && transport.getVehicleType().length() <= 255)*/ {
-        transportRepo.save(transport);
-    }
+                && checkYearRelease(transport.getYearRelease()) && transport.getVehicleType() != null && transport.getVehicleType().length() <= 255) {
+            transportRepo.save(transport);
+            return true;
+        }
+        return false;
     }
     // Проверка корректности государственного номера ТС
     private Boolean checkStateNumber(String chStateNumber) {

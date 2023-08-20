@@ -13,13 +13,11 @@ public class ControllerJSON {
     }
     @PostMapping("insert")
     public Boolean insert(@RequestBody Transport transport) {
-        transportService.insertNewTransport(transport);
-        return true;
+        return transportService.insertNewTransport(transport);
     }
     @PostMapping("delete")
     public Boolean delete(@RequestBody Transport transport) {
-        transportService.deleteTransport(transport);
-        return true;
+        return transportService.deleteTransport(transport);
     }
     @PostMapping("inf")
     public Transport inf(@RequestBody Transport transport) {
@@ -28,9 +26,7 @@ public class ControllerJSON {
     }
     @PostMapping("edit")
     public Boolean edit(@RequestBody Transport transport) {
-        if(transport.getBrand() == null) return true;
-        transportService.editingTransport(transport);
-        return true;
+        return transportService.editingTransport(transport);
     }
 }
 
